@@ -1,5 +1,4 @@
-import 'package:dreams_come_true_app/screens/LoginScreen.dart';
-import 'package:dreams_come_true_app/screens/initialScreen.dart';
+import 'package:dreams_come_true_app/screens/WelcomeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -14,6 +13,6 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-        debugShowCheckedModeBanner: false, home: InitalScreen());
+        debugShowCheckedModeBanner: false, home: WelcomeScreen());
   }
 }

@@ -19,7 +19,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   var logger = Logger();
-
+  late String _avatar = "";
+  late String _username = "";
   int _selectedIndex = 0;
   final int _index = 0;
 
@@ -48,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final apiUrl = '${dotenv.env['BASE_URL']}/post';
 
-      final LocalStorage storage = LocalStorage('token');
+      final LocalStorage storage = LocalStorage('user');
       await storage.ready;
 
       final token = storage.getItem('access_token') as String;
@@ -108,30 +109,42 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
+  Future<void> fetchUserInfo() async {
+    final LocalStorage storage = LocalStorage('user');
+    await storage.ready;
+
+    _avatar = storage.getItem('avatar') as String;
+    _username = storage.getItem('username') as String;
+  }
+
   @override
   void initState() {
-    _scrollController = ScrollController();
-    //_scrollController.addListener(_scrollListener);
     super.initState();
+
+    _scrollController = ScrollController();
+    //_scrollController.addListener(_scrollListener)
+    //fetchUserInfo();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dremas Come True'),
+        title: Text('Welcome $_username'),
         centerTitle: true,
         backgroundColor: Colors.black,
         elevation: 0,
+        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
         actions: [
           IconButton(
             icon: const Icon(Icons.favorite_border),
             onPressed: () {},
           ),
-          IconButton(
-            icon: const Icon(Icons.message),
-            onPressed: () {},
-          )
+          // CircleAvatar(
+          //   backgroundImage: NetworkImage(
+          //     '${dotenv.env['IMAGE_BASE_URL']}/avatar/$_avatar',
+          //   ),
+          // )
         ],
       ),
       body: Container(
@@ -182,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   future: _fetchPostData(),
                   builder: ((context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
+                      return const Center(child: CircularProgressIndicator());
                     } else if (snapshot.hasError) {
                       return Text('에러: ${snapshot.error}');
                     } else {

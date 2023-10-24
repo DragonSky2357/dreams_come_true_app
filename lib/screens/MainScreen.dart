@@ -1,6 +1,6 @@
-import 'package:dreams_come_true_app/screens/CategoryScreen.dart';
 import 'package:dreams_come_true_app/screens/CreatePostScreen.dart';
 import 'package:dreams_come_true_app/screens/HomeScreen.dart';
+import 'package:dreams_come_true_app/screens/PopularDreamChartsScreen.dart';
 import 'package:dreams_come_true_app/screens/ProfileScreen.dart';
 import 'package:dreams_come_true_app/screens/SearchScreen.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const CategoryScreen(),
+    const PopularDreamChartsScreen(),
     const SearchScreen(),
     const ProfileScreen(),
   ];
@@ -50,8 +50,8 @@ class _MainScreenState extends State<MainScreen> {
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.category),
-              label: 'Category',
+              icon: Icon(Icons.bar_chart_sharp),
+              label: 'Chart',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.search),

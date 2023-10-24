@@ -36,9 +36,12 @@ class _LoginScreenState extends State<LoginScreen> {
         final response = await dio.post(apiUrl, data: data);
 
         if (response.statusCode == HttpStatus.ok) {
-          final LocalStorage storage = LocalStorage('token');
+          final LocalStorage storage = LocalStorage('user');
+
           await storage.ready;
 
+          storage.setItem('avatar', response.data['avatar']);
+          storage.setItem('username', response.data['username']);
           storage.setItem('access_token', response.data['access_token']);
           storage.setItem('refresh_token', response.data['refresh_token']);
 
@@ -67,138 +70,225 @@ class _LoginScreenState extends State<LoginScreen> {
           width: double.infinity,
           height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
+              color: Colors.black,
               image: DecorationImage(
-                  image: AssetImage('assets/images/BackgroundLogin.jpg'),
+                  image: AssetImage('assets/images/category7.png'),
+                  opacity: 0.3,
                   fit: BoxFit.cover)),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+            padding: const EdgeInsets.fromLTRB(20, 100, 20, 10),
             child: Column(
               children: <Widget>[
-                const Expanded(
-                  flex: 2,
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'DREAMS COME TRUE',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 38,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            '당신의 꿈을 들려주세요',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 26,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+                const SizedBox(
+                  width: double.infinity,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Welcome back',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 38,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          'Sign in to discover, watch, and enjoy of dreams',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 3,
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: <Widget>[
-                          TextFormField(
-                            style: const TextStyle(
+                const SizedBox(height: 40),
+                SizedBox(
+                  width: double.infinity,
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        TextFormField(
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              decorationThickness: 0),
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            labelStyle: const TextStyle(color: Colors.white),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.0),
+                              borderSide: const BorderSide(
                                 color: Colors.white,
-                                fontSize: 20,
-                                decorationThickness: 0),
-                            decoration: const InputDecoration(
-                                labelText: 'Email',
-                                labelStyle: TextStyle(color: Colors.white),
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.white))),
-                            validator: (value) {
-                              if (value != null && value.isEmpty) {
-                                return '이메일을 입력하세요.';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              _email = value;
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          TextFormField(
-                            obscureText: true,
-                            style: const TextStyle(
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.0),
+                              borderSide: const BorderSide(
                                 color: Colors.white,
-                                fontSize: 20,
-                                decorationThickness: 0),
-                            decoration: const InputDecoration(
-                                labelText: 'Password',
-                                labelStyle: TextStyle(color: Colors.white),
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.white))),
-                            validator: (value) {
-                              if (value != null && value.isEmpty) {
-                                return '비밀번호를 입력하세요.';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              _password = value;
-                            },
+                                width: 1.0,
+                              ),
+                            ),
                           ),
-                        ],
-                      ),
+                          validator: (value) {
+                            if (value != null && value.isEmpty) {
+                              return '이메일을 입력하세요.';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            _email = value;
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        TextFormField(
+                          obscureText: true,
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              decorationThickness: 0),
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            labelStyle: const TextStyle(color: Colors.white),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.0),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(14.0),
+                              borderSide: const BorderSide(
+                                color: Colors.white,
+                                width: 1.0,
+                              ),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value != null && value.isEmpty) {
+                              return '비밀번호를 입력하세요.';
+                            }
+                            return null;
+                          },
+                          onChanged: (value) {
+                            _password = value;
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                Expanded(
-                  flex: 3,
-                  child: Column(children: [
-                    GestureDetector(
-                        onTap: () {
-                          _submitLogInHandler();
-                        },
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white70),
-                          child: const Center(child: Text('LOG IN')),
+                const SizedBox(height: 40),
+                Column(children: [
+                  GestureDetector(
+                      onTap: () {
+                        _submitLogInHandler();
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.deepPurple),
+                        child: const Center(
+                            child: Text(
+                          'Sign In',
+                          style: TextStyle(color: Colors.white),
                         )),
-                    const SizedBox(
-                      height: 10,
+                      )),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: const Text(
+                      'Forget your password?',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const SignupScreen()));
-                        },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Expanded(
                         child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.amber),
+                            margin:
+                                const EdgeInsets.only(left: 10.0, right: 20.0),
+                            child: const Divider(
+                              color: Colors.white,
+                              height: 36,
+                            )),
+                      ),
+                      const Text("OR", style: TextStyle(color: Colors.white)),
+                      Expanded(
+                        child: Container(
+                            margin:
+                                const EdgeInsets.only(left: 20.0, right: 10.0),
+                            child: const Divider(
+                              color: Colors.white,
+                              height: 36,
+                            )),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 30),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.yellow),
                           child: const Center(
-                              child: Text(
-                            'SIGN UP',
-                            style: TextStyle(color: Colors.white),
-                          )),
-                        )),
-                  ]),
-                )
+                            child: Text(
+                              'Kakao',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white),
+                          child: const Center(
+                            child: Text(
+                              'Google',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ]),
+                const SizedBox(height: 50),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SignupScreen()));
+                  },
+                  child: const Text(
+                    'Need an account? Register',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ),
               ],
             ),
           ),

@@ -28,7 +28,7 @@ class _PostScreenState extends State<PostScreen> {
     try {
       final apiUrl = '${dotenv.env['BASE_URL']}/post/$postId';
 
-      final LocalStorage storage = LocalStorage('token');
+      final LocalStorage storage = LocalStorage('user');
       await storage.ready;
 
       final token = storage.getItem('access_token') as String;
@@ -37,6 +37,8 @@ class _PostScreenState extends State<PostScreen> {
           options: Options(headers: {'authorization': 'Bearer $token'}));
 
       final data = response.data;
+
+      logger.d(data);
 
       Post post = Post.fromJson(data);
       username = post.writer?.username;
